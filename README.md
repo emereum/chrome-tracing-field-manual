@@ -12,7 +12,7 @@ Close off all other chrome processes and tabs except for the tab you want to tra
 
 In a new tab, navigate to `chrome://tracing`. At the top left you'll see a `Record` button. Click it, accept all default options, then click `Record`. Now refresh the page you want to trace. You should see the tracing buffer begin to fill up. Click `Stop` and you'll be presented with a trace that looks something like this:
 
-![[Pasted image 20230610171902.png]]
+![](Pasted%20image%2020230610171902.png)
 
 These data need to be filtered to be useful. Click the `Processes` button (top right), then uncheck all but the tab of interest. Look for a name like `Renderer (pid 1234): Your Page Title`.
 
@@ -26,7 +26,7 @@ Now that you have a trace and have filtered it down to your tab of interest, let
 #### WASD
 `tracing` uses Quake-style navigation. Use the keys `A, D` to navigate back and forward in time. Use the keys `W, S` to zoom in and out. Hold `shift` to zoom faster. Zooming operations are centered around the mouse cursor, so place the cursor on a block of spans and zoom in:
 
-![[Pasted image 20230610172952.png]]
+![](Pasted%20image%2020230610172952.png)
 
 #### Mouse modes: 1, 2, 3, 4
 `tracing` also has four mouse modes which can be toggled using the floating mouse mode selector to the right of the window, or with keys `1, 2, 3, 4`:
@@ -39,7 +39,7 @@ Now that you have a trace and have filtered it down to your tab of interest, let
 ### How to analyse traces
 Put your mouse into selection mode (press `1`) then click and drag to select all the spans in `CrRendererMain`. You should see the analysis view populate with data (at the bottom of the window). Click the `Slices` tab if it's not already selected:
 
-![[Pasted image 20230610173841.png]]
+![](Pasted%20image%2020230610173841.png)
 
 `ThreadControllerImpl::RunTask` should be at the top of the list for `Wall Duration`; this method is the initiator for _any_ renderer activity. If a page is slow and there is no `RunTask` span during the slow period, the problem is either browser or GPU related.
 
@@ -48,7 +48,7 @@ At the moment the analysis view is showing a summary table because we have selec
 
 You can use your browser's back and forward buttons to navigate through the analysis view.
 
-![[Pasted image 20230610182457.png]]
+![](Pasted%20image%2020230610182457.png)
 
 The `ThreadControllerImpl::RunTask` traces appear to log some arguments. Different trace types will log different information. Pick one invocation that looks interesting, I chose this one: 
 
@@ -80,7 +80,7 @@ which schedules the `HTMLDocumentParser::DeferredPumpTokenizerIfPossible` functi
 
 Sure enough, if we look at the tracing data we do find that `DeferredPumpTokenizerIfPossible` was called by `RunTask` :
 
-![[Pasted image 20230610183938.png]]
+![](Pasted%20image%2020230610183938.png)
 
 What does this mean? Not a whole lot since this is just an exercise to get familiar with `tracing`. It is interesting to note that our trace took us to `chromium/src/third_party/blink`, however.
 
